@@ -20,7 +20,7 @@ image = img_to_array(image)
 image = np.expand_dims(image, axis=0)
 
 
-model = load_model('mymodel.h5')
+model = load_model('model.h5')
 
 (not_notes, notes) = model.predict(image)[0]
 

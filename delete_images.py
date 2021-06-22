@@ -1,46 +1,37 @@
 from keras.preprocessing.image import img_to_array
 from keras.models import load_model
 import numpy as np 
-import argparse
-import imutils
-import cv2
-import os
+import cv2, os
 
-ap = argparse.ArgumentParser()
-
-# ap.add_argument("-i", "--image", required=True,
-#	help="path to input image")
-#args = vars(ap.parse_args())
-
-#image = cv2.imread(args['image'])
-examples = 'examples\\'
+examples = 'examples/'
 image = []
 
 for img in os.listdir(examples):
-	img = os.path.join(examples,img)
-	image = cv2.imread(img)
+	temp_name = img
+	image = cv2.imread(os.path.join(examples, img))
 	orig = image.copy()
-	image = cv2.resize(image,(28,28))
+	
+	# Preprocessing the image & Prediction
+	image = cv2.resize(image, (28, 28))
 	image = image.astype('float')/255.0	
 	image = img_to_array(image)
 	image = np.expand_dims(image, axis=0)
-	model = load_model('mymodel.h5')
+	model = load_model('model.h5')
 	(not_notes, notes) = model.predict(image)[0]
 	label = 'notes' if notes > not_notes else "not_notes"
 	proba = notes if notes > not_notes else not_notes
 	# label = "{}: {:.2f}%".format(label,proba*100)
-	print(label)
-	if(label == "not_notes"):
-		print("here")
-		# os.mkdir("Not-Notes")
 	
- 	# if(notes > not_notes):
-	# 	print("deleting")
-	# 	os.remove(img)
+	# Sorting in Respective folders
+	if(label == "not_notes"):
+		if not os.path.exists('Not_Notes'):
+			os.makedirs('Not_Notes')
 
+		path = 'Not_Notes/'+temp_name
+	else:
+		if not os.path.exists('Notes'):
+    			os.makedirs('Notes')
 
-output = imutils.resize(orig,width=400)
-cv2.putText(output,label,(10,25), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,255,0), 2)
-
-cv2.imshow("Output", output)
-cv2.waitKey(0)
+		path = 'Notes/'+temp_name
+  
+	cv2.imwrite(path, orig)

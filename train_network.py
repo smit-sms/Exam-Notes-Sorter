@@ -90,7 +90,7 @@ H = model.fit_generator(aug.flow(trainX,trainY,batch_size=BS),
 	epochs=EPOCHS, verbose=1)
 
 print('[INFO] serializing network...')
-model.save('mymodel.h5')
+model.save('model.h5')
 
 
 plt.style.use("ggplot")
