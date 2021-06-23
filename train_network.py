@@ -10,10 +10,7 @@ from lenet import LeNet
 from imutils import paths
 import matplotlib.pyplot as plt 
 import numpy as np 
-import argparse
-import random
-import cv2
-import os
+import argparse, random, cv2, os
 
 ap = argparse.ArgumentParser()
 # ap.add_argument('-d', "--dataset", required=True, help='path to input dataset')
@@ -37,12 +34,12 @@ imagePaths = []
 notes = 'images\\notes'
 not_notes = 'images\\not_notes'
 for filename in os.listdir(notes):
-		img = os.path.join(notes,filename)
-		imagePaths.append(img)
+	img = os.path.join(notes,filename)
+	imagePaths.append(img)
 
 for filename in os.listdir(not_notes):
-		img = os.path.join(not_notes,filename)
-		imagePaths.append(img)
+	img = os.path.join(not_notes,filename)
+	imagePaths.append(img)
 
 random.seed(42)
 random.shuffle(imagePaths)		
@@ -62,11 +59,11 @@ for imagePath in imagePaths:
 #scale image in range [0,1]
 data = np.array(data,dtype='float')/255.0
 labels = np.array(labels)
-(trainX,testX,trainY,testY) = train_test_split(data,labels,test_size=0.25,random_state=42)
+(X_train,X_test,Y_train,Y_test) = train_test_split(data,labels,test_size=0.25,random_state=42)
 
 #convert labels from int to vector
-trainY = to_categorical(trainY,num_classes=2)
-testY = to_categorical(testY,num_classes=2)
+Y_train = to_categorical(Y_train,num_classes=2)
+Y_test = to_categorical(Y_test,num_classes=2)
 
 #data augmentation
 
@@ -85,8 +82,8 @@ model.compile(loss='binary_crossentropy', optimizer=opt, metrics=['accuracy'])
 
 #train the network
 print('[INFO] training network...')
-H = model.fit_generator(aug.flow(trainX,trainY,batch_size=BS),
-	validation_data=(testX,testY), steps_per_epoch=len(trainX)//BS,
+H = model.fit_generator(aug.flow(X_train,Y_train,batch_size=BS),
+	validation_data=(X_test,Y_test), steps_per_epoch=len(X_train)//BS,
 	epochs=EPOCHS, verbose=1)
 
 print('[INFO] serializing network...')
