@@ -27,9 +27,11 @@ For training on custom data, follow the steps:
 
 ![Graph](plot.png "Accuracy graph")
 
+
 ## Demo
 
-[Click here to watch](https://github.com/smit-sms/Exam-Notes-Sorter/blob/main/LICENSE)
+https://user-images.githubusercontent.com/52400400/123778821-24232b00-d8ef-11eb-980e-3d4f5e0ae389.mp4
+
 
 ## License
 
